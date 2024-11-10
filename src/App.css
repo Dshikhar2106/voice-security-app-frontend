@@ -1,0 +1,164 @@
+/* Gradient background on the entire page */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Enhance Card Design */
+.login-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.login-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Fields Transition */
+.input-field {
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input-field:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 5px rgba(63, 81, 181, 0.5);
+}
+
+/* Button Hover and Transition */
+.button-transition {
+  transition: background-color 0.3s ease;
+}
+
+.button-transition:hover {
+  background-color: #3f51b5;
+}
+
+/* Links Styling */
+.text-link {
+  text-decoration: none;
+  color: #3f51b5;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.text-link:hover {
+  color: #00bcd4;
+}
+
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fullscreen Background Gradient */
+.signup-container {
+  position: relative;
+  background: linear-gradient(to top, #3b5998, #8b9dc3);
+  animation: backgroundTransition 10s infinite alternate; /* Smooth background transition */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes backgroundTransition {
+  0% {
+    background: linear-gradient(to top, #3b5998, #8b9dc3);
+  }
+  50% {
+    background: linear-gradient(to top, #1c1c1c, #333333);
+  }
+  100% {
+    background: linear-gradient(to top, #00bcd4, #3f51b5);
+  }
+}
+
+/* Overlay on the background */
+.signup-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -1;
+}
+
+/* Card Styling */
+.signup-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Hover Effect on Card */
+.signup-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Input Fields Styling */
+.input-field {
+  border-radius: 25px;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #ddd;
+}
+
+/* Input Field Focus Styling */
+.input-field:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 10px rgba(63, 81, 181, 0.4);
+}
+
+/* Button Styling */
+.button-transition {
+  background-color: #3f51b5;
+  border-radius: 25px;
+  padding: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Button Hover Effect */
+.button-transition:hover {
+  background-color: #303f9f;
+  transform: translateY(-5px);
+}
+
+/* Link Styling */
+.text-link {
+  color: #3f51b5;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Link Hover Effect */
+.text-link:hover {
+  color: #00bcd4;
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+  .signup-card {
+    padding: 20px;
+  }
+  .input-field {
+    font-size: 14px;
+  }
+  .button-transition {
+    font-size: 14px;
+  }
+}
