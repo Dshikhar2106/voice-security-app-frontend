@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
+import { toast , Toaster} from 'react-hot-toast';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({
@@ -31,7 +33,7 @@ const Signup = () => {
 
     if (!formData.dob) newErrors.dob = 'Date of birth is required';
     if (!formData.gender) newErrors.gender = 'Gender is required';
-    
+
     const phoneRegex = /^[0-9]{10,15}$/;
     if (!formData.number) newErrors.number = 'Phone number is required';
     else if (!phoneRegex.test(formData.number)) newErrors.number = 'Phone number is not valid';
@@ -51,18 +53,63 @@ const Signup = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError(''); // Clear any previous API errors
     const validationErrors = validate();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      setIsSubmitted(true);
-      console.log("Form submitted successfully");
+      try {
+        const response = await fetch('http://localhost:4000/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData), // Convert form data to JSON
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showToast()
+          setIsSubmitted(true);
+          setFormData({
+            name: '',
+            email: '',
+            dob: '',
+            gender: '',
+            number: '',
+            password: '',
+            confirmPassword: '',
+          });
+        } else {
+          errToast()
+          setApiError(data.error || 'An error occurred while submitting the form.');
+        }
+      } catch (err) {
+        errToast()
+        setApiError('Failed to connect to the server. Please try again later.');
+        console.error('Error:', err);
+      }
     } else {
       setIsSubmitted(false);
     }
   };
+
+  const showToast = () => {
+    toast.success('You registered succesfully', {
+      duration: 4000, // Optional: Time in ms
+    });
+  }
+
+
+  const errToast = () => {
+    toast.error('Something went wrong', {
+      duration: 4000, // Optional: Time in ms
+    });
+  }
+
 
   return (
     <Container
@@ -71,9 +118,10 @@ const Signup = () => {
       style={{
         minHeight: '100vh',
         backgroundColor: '#f0f2f5',
-        overflow: 'hidden', // Remove scroll
+        overflow: 'hidden',
       }}
     >
+      <Toaster/>
       <Row className="w-100 justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <Card className="p-4" style={{ borderRadius: '8px' }}>
@@ -81,10 +129,12 @@ const Signup = () => {
               <h2 className="text-center mb-4" style={{ color: '#1877f2' }}>
                 Create a New Account
               </h2>
-              
+
               {isSubmitted && <Alert variant="success">Registered successfully!</Alert>}
+              {apiError && <Alert variant="danger">{apiError}</Alert>}
 
               <Form onSubmit={handleSubmit}>
+                {/* Form Fields */}
                 <Form.Group controlId="formBasicName" className="mt-3">
                   <Form.Control
                     type="text"

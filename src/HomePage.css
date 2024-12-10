@@ -1,0 +1,190 @@
+/* HomePage.css */
+
+/* Sidebar */
+.sidebar {
+    background-color: #f4f7fa;
+    border-right: 1px solid #ddd;
+    height: 100vh;
+    padding-top: 20px;
+  }
+  
+  .sidebar-item {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-item button {
+    font-size: 16px;
+  }
+  
+  .sidebar-item button:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #007bff;
+    color: white;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .header .btn {
+    border-radius: 25px;
+    font-size: 14px;
+  }
+  
+  /* Post Cards */
+  .post-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  button {
+    border-radius: 20px;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    border-radius: 20px;
+  }
+  
+  input-group .form-control {
+    border-radius: 20px;
+  }
+  
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus {
+    box-shadow: none;
+    border-color: #007bff;
+  }
+  
+  .card-title {
+    font-weight: bold;
+  }
+  
+  .card-subtitle {
+    font-size: 14px;
+  }
+  
+  .card-text {
+    font-size: 16px;
+  }
+  
+  .card-footer {
+    text-align: right;
+  }
+  
+
+  /* HomePage.css */
+
+/* Make sure the body and container take up the full height */
+html, body, .App {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Ensure the container takes up the full height */
+  .container-fluid {
+    height: 100%;
+    padding-top: 20px; /* Optional: adjust spacing */
+  }
+  
+  /* Sidebar sticky styling */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh; /* Make sure it occupies full viewport height */
+    padding-top: 20px; /* Optional: to add spacing from the top */
+    z-index: 10; /* Ensure it stays on top of the content */
+    text-align: center; /* Center content in the sidebar */
+  }
+  
+  /* Profile picture styling */
+  .profile-img {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Make it square */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the circle without stretching */
+    margin-bottom: 20px; /* Space below the profile image */
+  }
+  
+  /* Optional: Styling for the media preview */
+  .media-preview img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Optional: Styling for the post media */
+  .post-media img {
+    width: 100%;
+    height: auto;
+  }
+  
+
+  /* HomePage.css */
+
+/* File Upload Button */
+.file-upload-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .file-upload-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .file-upload-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .file-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .file-upload-label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .media-preview img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
