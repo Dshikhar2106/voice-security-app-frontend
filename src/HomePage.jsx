@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Container, Row, Col, Form, InputGroup, FormControl } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './_context/AuthContext'; // For authentication context
@@ -10,47 +10,90 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   // State for managing posts
-  const [posts, setPosts] = useState([
-    { id: 1, user: 'John Doe', content: 'Hello, this is my first post!', date: '2024-12-08', media: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Akshay-Kumar.jpg' },
-    { id: 2, user: 'Jane Smith', content: 'Loving this new platform!', date: '2024-12-07', media: null }
-  ]);
+  const [posts, setPosts] = useState([]);
   
-  // State for creating a new post
-  const [newPost, setNewPost] = useState('');
-  const [media, setMedia] = useState(null); // State to store image
-  const [mediaName, setMediaName] = useState(''); // State to store file name
-  const [user , setuser] = useState()
-  // Handle post submission
-  const handlePostSubmit = () => {
-    if (newPost.trim() || media) {
-      const newPostObject = {
-        id: posts.length + 1,
-        user: 'Current User', // Replace with dynamic user name
-        content: newPost,
-        date: new Date().toLocaleDateString(),
-        media: media, // Add media to post object
-      };
-      setPosts([newPostObject, ...posts]);
-      setNewPost('');
-      setMedia(null); // Reset media after post
-      setMediaName('');
+
+  useEffect(() => {
+  
+
+    fetchPosts();  // Call the fetch function
+  }, []);  // Empty dependency array means this effect runs once when the component mounts
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/users/getPosts');  // Fetching all posts
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch posts');
+      }
+      const data = await response.json();  // Parse JSON data
+      console.log(data.posts ,'lll');
+      setPosts(data.posts);  // Set posts state
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      // setError(error.message);  // Set error if something went wrong
+    } finally {
+      // setLoading(false);  // Set loading to false once data is fetched
     }
   };
 
-  // Handle media file upload (image or video)
+  const [user, setuser] = useState();
+  const [newPost, setNewPost] = useState(""); // For the text input
+  const [media, setMedia] = useState(null);   // For previewing the uploaded file
+  const [mediaName, setMediaName] = useState(""); // Displaying uploaded file name
+  const [mediaFile, setMediaFile] = useState(null); // Actual file data
+  
+  // Handle file input change
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const fileType = file.type.split('/')[0];
-      if (fileType === 'image') {
-        setMedia(URL.createObjectURL(file)); // Store image as an object URL
-        setMediaName(file.name); // Store file name
-      } else {
-        alert('Please upload a valid image.');
-      }
+      setMediaName(file.name);
+      setMedia(URL.createObjectURL(file)); // Preview image
+      setMediaFile(file); // Save the file for submission
     }
   };
-
+  
+  // Handle Post Submission
+  const handlePostSubmit = async () => {
+    if (!newPost || !mediaFile) {
+      alert("Please enter a post and choose an image.");
+      return;
+    }
+  
+    try {
+      // Create FormData to send file along with text data
+      const formData = new FormData();
+      formData.append("text", newPost); // Append text data
+      formData.append("file", mediaFile); // Append the file data
+      formData.append("filetype", mediaFile.type); // Append file type
+      formData.append("userId", user?.id); // Replace with dynamic userId if available
+  
+      // Send POST request with FormData
+      const response = await fetch("http://localhost:4000/api/users/createPost", {
+        method: "POST",
+        body: formData, // Sending FormData directly
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert("Post submitted successfully!");
+        console.log("Response:", result);
+        // Clear form
+        fetchPosts()
+        setNewPost("");
+        setMedia(null);
+        setMediaName("");
+        setMediaFile(null);
+      } else {
+        alert("Failed to submit post: " + result.error);
+      }
+    } catch (error) {
+      console.error("Error submitting post:", error);
+      alert("An error occurred while submitting the post.");
+    }
+  };
+  
   // Logout functionality
   const handleLogout = () => {
     logout();
@@ -114,7 +157,7 @@ setuser(e)
             {/* Display the selected image */}
             {media && (
               <div className="media-preview mb-3">
-                <img src={media} alt="preview" className="img-fluid" />
+                <img style={{width:150 , height : 150 , objectFit : 'contain'}} src={media} alt="preview" className="img-fluid" />
               </div>
             )}
 
@@ -125,7 +168,7 @@ setuser(e)
           {posts.length === 0 ? (
             <p>No posts yet! Be the first to share something.</p>
           ) : (
-            posts.map((post) => (
+            posts.reverse().map((post) => (
               <Card key={post.id} className="mb-3 post-card">
                 <Card.Body>
                   <Card.Title>{post.user}</Card.Title>

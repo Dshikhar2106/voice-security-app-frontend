@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
-
+  const [posts , setposts] = useState([])
   // Initial form data (can be fetched from an API or context)
   const [formData, setFormData] = useState({
     name: '',
@@ -21,7 +21,7 @@ const ProfilePage = () => {
     confirmPassword: '',
     profileImage: '' // Add profile image field
   });
-
+console.log(user , 'jjjj' , posts);
   const [isEditing, setIsEditing] = useState(false); // Track if the user is editing the profile
 
   // Handle input changes
@@ -86,8 +86,25 @@ const ProfilePage = () => {
     }
   };
 
+  const fetchMyPosts = async (e) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/users/getMyPosts?userId=${e}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setposts(data.posts); // Set posts data to state
+      } else {
+        console.error("Error fetching posts:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+
   useEffect(() => {
     getProfile();
+    fetchMyPosts(user?.id)
   }, []);
 
   // Fetch user profile data when the page loads
@@ -143,7 +160,6 @@ const ProfilePage = () => {
         <Sidebar />
         <Col md={6} className="mx-auto">
           <Card className="p-4">
-            <h3>{isEditing ? 'Edit Profile' : user.name}</h3>
 
             {isEditing ? (
               <Form onSubmit={handleSubmit}>
@@ -266,8 +282,36 @@ const ProfilePage = () => {
                 </Button>
               </div>
             )}
+
+{
+             posts.reverse().map((post) => (
+              <Card key={post.id} className="mb-3 post-card mt-5">
+                <Card.Body>
+                  <Card.Title>{post.user}</Card.Title>
+                  <Card.Subtitle className="text-muted">{post.date}</Card.Subtitle>
+                  <Card.Text>{post.content}</Card.Text>
+                  {/* Display post media (image) */}
+                  {post.media && (
+                    <div className="post-media mb-3">
+                      <img src={post.media} style={{  objectFit:'contain'}} alt="post media" className="img-fluid" />
+                    </div>
+                  )}
+
+                  <Button variant="outline-secondary">Like</Button>
+                  <Button variant="outline-secondary" className="ms-2">Comment</Button>
+                </Card.Body>
+              </Card>
+            )
+             )
+           }
+        
+          
           </Card>
         </Col>
+      </Row>
+      <Row> 
+
+     
       </Row>
     </Container>
   );
