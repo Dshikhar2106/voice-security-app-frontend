@@ -153,6 +153,7 @@ const HomePage = () => {
       const data = await response.json();
       setComments(data.comments);
       setSelectedPostId(postId);
+      fetchPosts()
       setShowModal(true);
     } catch (error) {
       console.error("Error fetching comments:", error.message);
