@@ -135,6 +135,7 @@ const HomePage = () => {
 
       const data = await response.json();
       console.log("Like Response:", data);
+      fetchPosts()
       // setLiked(true);
     } catch (error) {
       console.log(error.message);
